@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
 )
 @SpringBootApplication
 public class ClinicbookingApplication {
-
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ClinicbookingApplication.class, args);
