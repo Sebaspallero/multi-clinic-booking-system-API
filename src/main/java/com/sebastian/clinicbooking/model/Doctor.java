@@ -46,7 +46,7 @@ public class Doctor extends User {
         joinColumns = @JoinColumn(name = "doctor_id"),
         inverseJoinColumns = @JoinColumn(name = "specialization_id")
     )
-    private List<Speciality> specializations;
+    private List<Speciality> specialities;
 
     @ManyToMany
     @JoinTable(
