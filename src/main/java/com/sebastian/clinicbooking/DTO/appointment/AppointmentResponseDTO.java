@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ApppointmentResponseDTO {
+public class AppointmentResponseDTO {
     
     private Long id;
     private AppointmentStatus status;

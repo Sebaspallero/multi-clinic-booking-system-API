@@ -1,4 +1,4 @@
-package com.sebastian.clinicbooking.DTO.specialization;
+package com.sebastian.clinicbooking.DTO.speciality;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,5 @@ public class SpecialityRequestDTO {
     
     @NotBlank(message = "Name is required")
     private String name;
-
-    
+   
 }
