@@ -21,7 +21,7 @@ public interface SpecialityMapper {
 
     SpecialityRequestDTO toDto(Speciality speciality);
 
-    Speciality toDetailDto(Speciality speciality);
+    SpecialityDetailDTO toDetailDto(Speciality speciality);
 
     List<SpecialityResponseDTO> toDtoList(List<Speciality> specialities);
 
