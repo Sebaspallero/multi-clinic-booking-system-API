@@ -1,7 +1,7 @@
 package com.sebastian.clinicbooking.DTO.clinic;
 
 
-import com.sebastian.clinicbooking.DTO.addres.AddressRequestDTO;
+import com.sebastian.clinicbooking.DTO.address.AddressRequestDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

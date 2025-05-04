@@ -18,16 +18,20 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "patients")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true, exclude = {"insurances", "appointments"})
+@ToString(callSuper = true, exclude = {"insurances", "appointments"})
 public class Patient extends User {
 
     @Column(name = "name", nullable = false)
@@ -41,7 +45,7 @@ public class Patient extends User {
 
     @Column(name = "birth_day", nullable = false)
     private LocalDate birthDate;
-    
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

@@ -1,4 +1,4 @@
-package com.sebastian.clinicbooking.DTO.patient;
+package com.sebastian.clinicbooking.DTO.doctor;
 
 import java.util.List;
 
@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PatientWithAppointment {
-
+public class DoctorWithAppointmentDTO {
+    
     private Long id;
     private String name;
     private String lastName;
-    private String identificationNumber;
+    private String licenseNumber;
+    private String profilePictureUrl;
     private List <AppointmentResponseDTO> appointments;
 }

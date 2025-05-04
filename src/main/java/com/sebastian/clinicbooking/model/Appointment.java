@@ -12,6 +12,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,16 +20,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "appointments")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"doctor", "patient", "clinic", "rescheduledFrom"})
+@EqualsAndHashCode(exclude = {"doctor", "patient", "clinic", "rescheduledFrom"})
 public class Appointment {
 
     @Id
@@ -36,6 +41,7 @@ public class Appointment {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AppointmentStatus status;
 
     @Column(name = "appointment_date_time", nullable = false)
@@ -50,17 +56,17 @@ public class Appointment {
     @Column(name = "confirmed", nullable = false)
     private boolean confirmed;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id", nullable = false)
+    private Clinic clinic;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -71,7 +77,7 @@ public class Appointment {
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cancelled_by")
+    @Column(name = "canceled_by")
     private Roles canceledBy;
 
     @Column(name = "cancellation_date")
@@ -80,9 +86,9 @@ public class Appointment {
     @Column(name = "cancellation_reason")
     private String cancellationReason;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rescheduled_from_id", referencedColumnName = "id")
     private Appointment rescheduledFrom;
-
 }
+
 

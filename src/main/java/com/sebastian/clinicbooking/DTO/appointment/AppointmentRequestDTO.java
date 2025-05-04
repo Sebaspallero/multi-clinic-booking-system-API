@@ -30,5 +30,8 @@ public class AppointmentRequestDTO {
 
     @NotNull(message = "Patient ID cannot be null")
     private Long patientId;
+
+    @NotNull(message = "Clinic ID cannot be null")
+    private Long clinicId;
     
 }

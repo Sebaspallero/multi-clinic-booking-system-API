@@ -2,6 +2,7 @@ package com.sebastian.clinicbooking.DTO.appointment;
 
 import java.time.LocalDateTime;
 
+import com.sebastian.clinicbooking.DTO.clinic.ClinicSummaryDTO;
 import com.sebastian.clinicbooking.DTO.doctor.DoctorSummaryDTO;
 import com.sebastian.clinicbooking.DTO.patient.PatientSummaryDTO;
 import com.sebastian.clinicbooking.enums.AppointmentStatus;
@@ -23,6 +24,7 @@ public class AppointmentResponseDTO {
     private boolean confirmed;
     private DoctorSummaryDTO doctor;
     private PatientSummaryDTO patient;
+    private ClinicSummaryDTO clinicName;
     private LocalDateTime createdAt;
     private CancellationInfoDTO cancellationInfo;
 }
