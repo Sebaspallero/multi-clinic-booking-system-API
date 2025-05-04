@@ -1,4 +1,4 @@
-package com.sebastian.clinicbooking.DTO.addres;
+package com.sebastian.clinicbooking.DTO.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

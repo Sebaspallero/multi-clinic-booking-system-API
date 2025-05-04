@@ -15,14 +15,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "health_insurances")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "doctors")
+@ToString(exclude = "doctors")
 public class HealthInsurance {
 
     @Id
@@ -46,3 +52,4 @@ public class HealthInsurance {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 }
+

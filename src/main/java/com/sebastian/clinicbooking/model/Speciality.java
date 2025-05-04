@@ -15,14 +15,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "specialities")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"doctors"})
+@ToString(exclude = {"doctors"})
 public class Speciality {
 
     @Id
@@ -32,7 +38,7 @@ public class Speciality {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "specializations", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "specialities", fetch = FetchType.LAZY)
     private List<Doctor> doctors;
 
     @CreationTimestamp
@@ -42,5 +48,5 @@ public class Speciality {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    
 }
+

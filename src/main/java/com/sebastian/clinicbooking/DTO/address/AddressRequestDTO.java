@@ -1,4 +1,4 @@
-package com.sebastian.clinicbooking.DTO.addres;
+package com.sebastian.clinicbooking.DTO.address;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
