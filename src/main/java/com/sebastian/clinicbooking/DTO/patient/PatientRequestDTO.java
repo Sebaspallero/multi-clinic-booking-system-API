@@ -1,11 +1,13 @@
 package com.sebastian.clinicbooking.DTO.patient;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.sebastian.clinicbooking.enums.Gender;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -49,6 +51,9 @@ public class PatientRequestDTO {
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^[0-9]+$", message = "Phone number must contain only numbers")
     private String phoneNumber;
+
+    @NotEmpty(message = "Insurance IDs are required")
+    private List<Long> insuranceIds;
     
     private String profilePictureUrl;
 }

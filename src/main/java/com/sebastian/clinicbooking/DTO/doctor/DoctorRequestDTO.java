@@ -1,7 +1,11 @@
 package com.sebastian.clinicbooking.DTO.doctor;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -40,6 +44,15 @@ public class DoctorRequestDTO {
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^[0-9]+$", message = "Phone number must contain only numbers")
     private String phoneNumber;
+
+    @NotNull(message = "Clinic ID is required")
+    private Long ClinicId;
+
+    @NotEmpty(message = "At least one Speciality must be selected")
+    private List<Long> specialityIds;
+
+    @NotEmpty(message = "At least one Health Insurance must be selected")
+    private List<Long> insuranceIds;
 
     private String biography;
 

@@ -26,8 +26,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = {"specialities", "insurances", "clinic", "appointments"})
-@ToString(callSuper = true, exclude = {"specialities", "insurances", "clinic", "appointments"})
+@EqualsAndHashCode(callSuper = true, exclude = {"specialities", "healthInsurances", "clinic", "appointments"})
+@ToString(callSuper = true, exclude = {"specialities", "healthInsurances", "clinic", "appointments"})
 public class Doctor extends User {
 
     @Column(name = "name", nullable = false)
@@ -59,7 +59,7 @@ public class Doctor extends User {
         joinColumns = @JoinColumn(name = "doctor_id"),
         inverseJoinColumns = @JoinColumn(name = "insurance_id")
     )
-    private List<HealthInsurance> insurances = new ArrayList<>();
+    private List<HealthInsurance> healthInsurances = new ArrayList<>();
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "clinic_id")
