@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.healthInsurance.HealthInsuranceRequestDTO;
 import com.sebastian.clinicbooking.DTO.healthInsurance.HealthInsuranceResponseDTO;
@@ -32,6 +33,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
     
     @Override
+    @Transactional
     public HealthInsuranceResponseDTO createHealthInsurance(HealthInsuranceRequestDTO healthInsuranceRequestDTO) {
         HealthInsurance healthInsurance = healthInsuranceMapper.toEntity(healthInsuranceRequestDTO);
         healthInsuranceRepository.save(healthInsurance);
@@ -40,6 +42,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public HealthInsuranceResponseDTO getHealthInsuranceById(Long id) {
         HealthInsurance healthInsurance = findHealthInsuranceById(id);
                 
@@ -48,6 +51,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<HealthInsuranceResponseDTO> getAllHealthInsurances() {
         List<HealthInsurance> healthInsurances = healthInsuranceRepository.findAll();
         log.info("Found {} Health Insurances", healthInsurances.size());
@@ -55,6 +59,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<HealthInsuranceResponseDTO> getAllHealthInsurances(Pageable pageable) {
         Page<HealthInsurance> healthInsurances = healthInsuranceRepository.findAll(pageable);
         log.info("Found {} Health Insurances", healthInsurances.getTotalElements());
@@ -62,6 +67,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<HealthInsurance> getHealthInsuranceEntitiesByIds(List<Long> ids) {
         List<HealthInsurance> healthInsurances = healthInsuranceRepository.findAllById(ids);
         log.info("Found {} Health Insurances by IDs", healthInsurances.size());
@@ -70,6 +76,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     
 
     @Override
+    @Transactional
     public HealthInsuranceResponseDTO updateHealthInsurance(Long id, HealthInsuranceRequestDTO healthInsuranceRequestDTO) {
         HealthInsurance healthInsurance = findHealthInsuranceById(id);
         
@@ -81,6 +88,7 @@ public class HealthInsuraceServiceImpl implements IHealthInsuranceService {
     }
 
     @Override
+    @Transactional
     public void deleteHealthInsurance(Long id) {
         HealthInsurance healthInsurance = findHealthInsuranceById(id);
         

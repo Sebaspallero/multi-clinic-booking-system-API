@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.appointment.AppointmentRequestDTO;
 import com.sebastian.clinicbooking.DTO.appointment.AppointmentResponseDTO;
@@ -46,6 +47,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional
     public AppointmentResponseDTO createAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         
         Clinic clinic = getClinicById(appointmentRequestDTO.getClinicId());
@@ -66,6 +68,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AppointmentResponseDTO getAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
@@ -75,6 +78,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AppointmentResponseDTO> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
         log.info("Found {} appointments", appointments.size());
@@ -82,6 +86,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AppointmentResponseDTO> getAllAppointments(Pageable pageable) {
         Page<Appointment> appointments = appointmentRepository.findAll(pageable);
         log.info("Found {} appointments", appointments.getTotalElements());
@@ -89,6 +94,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional
     public AppointmentResponseDTO updateAppointment(Long id, AppointmentRequestDTO appointmentRequestDTO) {
         Appointment appointmentToUpdate = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
@@ -110,6 +116,7 @@ public class AppointmentServiceImpl implements IAppointmentService{
     }
 
     @Override
+    @Transactional
     public void deleteAppointment(Long id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));

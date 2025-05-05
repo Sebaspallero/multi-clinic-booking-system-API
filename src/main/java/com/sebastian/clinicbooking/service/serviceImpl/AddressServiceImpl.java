@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.address.AddressRequestDTO;
 import com.sebastian.clinicbooking.DTO.address.AddressResponseDTO;
@@ -31,6 +32,7 @@ public class AddressServiceImpl implements IAddressService{
     }
 
     @Override
+    @Transactional
     public AddressResponseDTO createAddress(AddressRequestDTO addressRequestDTO) {
         Address address = addressMapper.toEntity(addressRequestDTO);
         addressRepository.save(address);
@@ -39,14 +41,16 @@ public class AddressServiceImpl implements IAddressService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AddressResponseDTO getAddressById(Long id) {
-        Address address = addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+        Address address = findAddressById(id);
+        
         log.info("Address found: {}", address);
         return addressMapper.toDto(address);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AddressResponseDTO> getAllAddresses() {
         List<Address> addresses = addressRepository.findAll();
         log.info("Found {} addresses", addresses.size());
@@ -54,6 +58,7 @@ public class AddressServiceImpl implements IAddressService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressResponseDTO> getAllAddresses(Pageable pageable) {
         Page<Address> addresses = addressRepository.findAll(pageable);
         log.info("Found {} addresses", addresses.getTotalElements());
@@ -61,9 +66,9 @@ public class AddressServiceImpl implements IAddressService{
     }
 
     @Override
+    @Transactional
     public AddressResponseDTO updateAddress(Long id, AddressRequestDTO addressRequestDTO) {
-        Address address = addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+        Address address = findAddressById(id);
 
         addressMapper.updateEntityFromDto(addressRequestDTO, address);
         addressRepository.save(address);
@@ -72,11 +77,16 @@ public class AddressServiceImpl implements IAddressService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void deleteAddress(Long id) {
-        Address address = addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id));
+        Address address = findAddressById(id);
 
         addressRepository.delete(address);
         log.info("Address deleted: {}", address);
+    }
+
+    private Address findAddressById(Long addressId) {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
     }
 }

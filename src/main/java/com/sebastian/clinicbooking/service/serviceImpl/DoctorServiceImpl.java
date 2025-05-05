@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.doctor.DoctorRequestDTO;
 import com.sebastian.clinicbooking.DTO.doctor.DoctorResponseDTO;
+import com.sebastian.clinicbooking.enums.Roles;
 import com.sebastian.clinicbooking.exception.ResourceNotFoundException;
 import com.sebastian.clinicbooking.mapper.DoctorMapper;
 import com.sebastian.clinicbooking.model.Clinic;
@@ -20,6 +22,7 @@ import com.sebastian.clinicbooking.service.IClinicService;
 import com.sebastian.clinicbooking.service.IDoctorService;
 import com.sebastian.clinicbooking.service.IHealthInsuranceService;
 import com.sebastian.clinicbooking.service.ISpecialityService;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +45,9 @@ public class DoctorServiceImpl implements IDoctorService{
         this.specialityService = specialityService;
     }
 
+
     @Override
+    @Transactional
     public DoctorResponseDTO createDoctor(DoctorRequestDTO doctorRequestDTO) {
         Clinic clinic = clinicService.getClinicEntityById(doctorRequestDTO.getClinicId());
 
@@ -60,6 +65,7 @@ public class DoctorServiceImpl implements IDoctorService{
         doctor.setClinic(clinic);
         doctor.setSpecialities(specialities);
         doctor.setHealthInsurances(healthInsurances);
+        doctor.setRole(Roles.DOCTOR);
         doctorRepository.save(doctor);
         log.info("Doctor created with ID: {}", doctor.getId());
         return doctorMapper.toDto(doctor);
@@ -67,6 +73,7 @@ public class DoctorServiceImpl implements IDoctorService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DoctorResponseDTO getDoctorById(Long id) {
         Doctor doctor = findDoctorById(id);
                 
@@ -74,7 +81,17 @@ public class DoctorServiceImpl implements IDoctorService{
         return doctorMapper.toDto(doctor);
     }
 
+    
     @Override
+    @Transactional(readOnly = true)
+    public Doctor getDoctorEntityById(Long id) {
+        Doctor doctor = findDoctorById(id);
+        log.info("Doctor found with ID: {}", doctor.getId());
+        return doctor;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<DoctorResponseDTO> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
         log.info("Found {} doctors", doctors.size());
@@ -82,6 +99,7 @@ public class DoctorServiceImpl implements IDoctorService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DoctorResponseDTO> getAllDoctors(Pageable pageable) {
         Page<Doctor> doctors = doctorRepository.findAll(pageable);
         log.info("Found {} doctors", doctors.getTotalElements());
@@ -89,6 +107,7 @@ public class DoctorServiceImpl implements IDoctorService{
     }
 
     @Override
+    @Transactional
     public DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO doctorRequestDTO) {
 
         Doctor doctorToUpdate = findDoctorById(id);
@@ -117,6 +136,7 @@ public class DoctorServiceImpl implements IDoctorService{
     }
 
     @Override
+    @Transactional
     public void deleteDoctor(Long id) {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
@@ -129,5 +149,7 @@ public class DoctorServiceImpl implements IDoctorService{
         return doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId)); 
     }
+
+
     
 }

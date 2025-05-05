@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.speciality.SpecialityRequestDTO;
 import com.sebastian.clinicbooking.DTO.speciality.SpecialityResponseDTO;
@@ -31,6 +32,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional
     public SpecialityResponseDTO createSpeciality(SpecialityRequestDTO specialityRequestDTO) {
         Speciality speciality = specialityMapper.toEntity(specialityRequestDTO);
         specialityRepository.save(speciality);
@@ -39,6 +41,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SpecialityResponseDTO getSpecialityById(Long id) {
         Speciality speciality = findSpecialityById(id);
         
@@ -47,6 +50,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SpecialityResponseDTO> getAllSpecialities() {
         List<Speciality> specialities = specialityRepository.findAll();
         log.info("Found {} specialities", specialities.size());
@@ -54,6 +58,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<SpecialityResponseDTO> getAllSpecialities(Pageable pageable) {
         Page<Speciality> specialities = specialityRepository.findAll(pageable);
         log.info("Found {} specialities", specialities.getTotalElements());
@@ -61,6 +66,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Speciality> getSpecialityEntitiesByIds(List<Long> ids) {
         List<Speciality> specialities = specialityRepository.findAllById(ids);
         log.info("Found {} specialities by IDs", specialities.size());
@@ -68,6 +74,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional
     public SpecialityResponseDTO updateSpeciality(Long id, SpecialityRequestDTO specialityRequestDTO) {
         Speciality speciality = findSpecialityById(id);
 
@@ -79,6 +86,7 @@ public class SpecialityServiceImpl implements ISpecialityService{
     }
 
     @Override
+    @Transactional
     public void deleteSpeciality(Long id) {
         Speciality speciality = findSpecialityById(id);
 
