@@ -19,7 +19,7 @@ public interface SpecialityMapper {
 
     Speciality toEntity(SpecialityRequestDTO dto);
 
-    SpecialityRequestDTO toDto(Speciality speciality);
+    SpecialityResponseDTO toDto(Speciality speciality);
 
     SpecialityDetailDTO toDetailDto(Speciality speciality);
 
