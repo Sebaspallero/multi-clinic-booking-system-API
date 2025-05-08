@@ -14,6 +14,6 @@ public interface IDoctorAvailabilityService {
     DoctorAvailabilityResponseDTO getDoctorAvailabilityById(Long id);
     List<DoctorAvailabilityResponseDTO> getAllDoctorAvailabilities();
     Page<DoctorAvailabilityResponseDTO> getAllDoctorAvailabilities(Pageable pageable);
-    void updateDoctorAvailability(Long id, DoctorAvailabilityRequestDTO requestDTO);
+    DoctorAvailabilityResponseDTO updateDoctorAvailability(Long id, DoctorAvailabilityRequestDTO requestDTO);
     void deleteDoctorAvailability(Long id);
 }

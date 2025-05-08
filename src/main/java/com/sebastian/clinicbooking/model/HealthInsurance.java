@@ -38,7 +38,7 @@ public class HealthInsurance {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "insurances", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "healthInsurances", fetch = FetchType.LAZY)
     private List<Doctor> doctors;
 
     @CreationTimestamp

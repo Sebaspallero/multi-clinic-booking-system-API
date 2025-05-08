@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.doctorAvailability.DoctorAvailabilityRequestDTO;
 import com.sebastian.clinicbooking.DTO.doctorAvailability.DoctorAvailabilityResponseDTO;
@@ -35,6 +36,7 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     
     
     @Override
+    @Transactional
     public DoctorAvailabilityResponseDTO createDoctorAvailability(DoctorAvailabilityRequestDTO requestDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(requestDTO.getDoctorId());
 
@@ -47,6 +49,7 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DoctorAvailabilityResponseDTO getDoctorAvailabilityById(Long id) {
         DoctorAvailability doctorAvailability = findDoctorAvailabilityById(id);
         log.info("Doctor Availability found with ID: {}", doctorAvailability.getId());
@@ -54,6 +57,7 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DoctorAvailabilityResponseDTO> getAllDoctorAvailabilities() {
         List<DoctorAvailability> doctorAvailabilities = doctorAvailabilityRepository.findAll();
         log.info("Found {} Doctor Availabilities", doctorAvailabilities.size());
@@ -61,6 +65,7 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DoctorAvailabilityResponseDTO> getAllDoctorAvailabilities(Pageable pageable) {
         Page<DoctorAvailability> doctorAvailabilities = doctorAvailabilityRepository.findAll(pageable);
         log.info("Found {} Doctor Availabilities", doctorAvailabilities.getTotalElements());
@@ -68,14 +73,19 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     }
 
     @Override
-    public void updateDoctorAvailability(Long id, DoctorAvailabilityRequestDTO requestDTO) {
-        DoctorAvailability doctorAvailability = findDoctorAvailabilityById(id);
+    @Transactional
+    public DoctorAvailabilityResponseDTO updateDoctorAvailability(Long id, DoctorAvailabilityRequestDTO requestDTO) {
+        DoctorAvailability doctorAvailability = findDoctorAvailabilityById(requestDTO.getDoctorId());
+        Doctor doctor = doctorService.getDoctorEntityById(id);
         doctorAvailabilityMapper.updateEntityFromDto(requestDTO, doctorAvailability);
+        doctorAvailability.setDoctor(doctor);
         doctorAvailabilityRepository.save(doctorAvailability);
         log.info("Doctor Availability updated with ID: {}", doctorAvailability.getId());
+        return doctorAvailabilityMapper.toDto(doctorAvailability);
     }
 
     @Override
+    @Transactional
     public void deleteDoctorAvailability(Long id) {
         DoctorAvailability doctorAvailability = findDoctorAvailabilityById(id);
         doctorAvailabilityRepository.delete(doctorAvailability);

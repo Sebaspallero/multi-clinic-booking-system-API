@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,14 @@ import com.sebastian.clinicbooking.DTO.speciality.SpecialityRequestDTO;
 import com.sebastian.clinicbooking.DTO.speciality.SpecialityResponseDTO;
 import com.sebastian.clinicbooking.model.Speciality;
 
-@Mapper(componentModel = "spring", uses = DoctorMapper.class)
+@Mapper(componentModel = "spring")
 public interface SpecialityMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "doctors", ignore = true)
+    @Mapping(target = "active", ignore = true)
     Speciality toEntity(SpecialityRequestDTO dto);
 
     SpecialityResponseDTO toDto(Speciality speciality);
@@ -37,6 +43,11 @@ public interface SpecialityMapper {
         return new PageImpl<>(dtoList, page.getPageable(), page.getTotalElements());
     }
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "doctors", ignore = true)
+    @Mapping(target = "active", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(SpecialityRequestDTO dto, @MappingTarget Speciality speciality);
     
