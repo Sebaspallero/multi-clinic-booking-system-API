@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,13 @@ import com.sebastian.clinicbooking.model.Patient;
 })
 public interface PatientMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "appointments", ignore = true)
+    @Mapping(target = "insurances", ignore = true)
     Patient toEntity(PatientRequestDTO dto);
 
     PatientResponseDTO toDto(Patient patient);
@@ -52,6 +60,13 @@ public interface PatientMapper {
         return new PageImpl<>(dtoList, page.getPageable(), page.getTotalElements());
     }
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "appointments", ignore = true)
+    @Mapping(target = "insurances", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(PatientRequestDTO dto, @MappingTarget Patient patient);
 

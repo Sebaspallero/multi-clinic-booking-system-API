@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.data.domain.Page;
@@ -13,16 +14,24 @@ import com.sebastian.clinicbooking.DTO.appointment.AppointmentRequestDTO;
 import com.sebastian.clinicbooking.DTO.appointment.AppointmentResponseDTO;
 import com.sebastian.clinicbooking.model.Appointment;
 
-@Mapper(componentModel = "spring", uses = {
-    PatientMapper.class,
-    ClinicMapper.class,
-    DoctorMapper.class,
-})
+@Mapper(componentModel = "spring")
 public interface AppointmentMapper {
     
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "cancellationReason", ignore = true)
+    @Mapping(target = "cancellationDate", ignore = true)
+    @Mapping(target = "doctor", ignore = true)
+    @Mapping(target = "patient", ignore = true)
+    @Mapping(target = "clinic", ignore = true)
+    @Mapping(target = "canceledBy", ignore = true)
+    @Mapping(target = "rescheduledFrom", ignore = true)
+    @Mapping(target = "confirmed", ignore = true)
     Appointment toEntity(AppointmentRequestDTO dto);
 
+    @Mapping(target = "cancellationInfo", ignore = true)
     AppointmentResponseDTO toDto(Appointment appointment);
 
     List <AppointmentResponseDTO> toDtoList(List<Appointment> appointments);
@@ -32,6 +41,18 @@ public interface AppointmentMapper {
         return new PageImpl<>(dtoList, page.getPageable(), page.getTotalElements());
     }
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "cancellationReason", ignore = true)
+    @Mapping(target = "cancellationDate", ignore = true)
+    @Mapping(target = "doctor", ignore = true)
+    @Mapping(target = "patient", ignore = true)
+    @Mapping(target = "clinic", ignore = true)
+    @Mapping(target = "canceledBy", ignore = true)
+    @Mapping(target = "rescheduledFrom", ignore = true)
+    @Mapping(target = "confirmed", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(AppointmentRequestDTO dto, @MappingTarget Appointment appointment);
 

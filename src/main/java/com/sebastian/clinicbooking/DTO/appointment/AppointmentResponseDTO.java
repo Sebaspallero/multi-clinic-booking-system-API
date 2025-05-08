@@ -24,7 +24,7 @@ public class AppointmentResponseDTO {
     private boolean confirmed;
     private DoctorSummaryDTO doctor;
     private PatientSummaryDTO patient;
-    private ClinicSummaryDTO clinicName;
+    private ClinicSummaryDTO clinic;
     private LocalDateTime createdAt;
     private CancellationInfoDTO cancellationInfo;
 }

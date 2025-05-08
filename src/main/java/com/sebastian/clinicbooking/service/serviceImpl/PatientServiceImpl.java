@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clinicbooking.DTO.patient.PatientRequestDTO;
 import com.sebastian.clinicbooking.DTO.patient.PatientResponseDTO;
 import com.sebastian.clinicbooking.enums.Roles;
+import com.sebastian.clinicbooking.exception.ResourceNotFoundException;
 import com.sebastian.clinicbooking.mapper.PatientMapper;
 import com.sebastian.clinicbooking.model.HealthInsurance;
 import com.sebastian.clinicbooking.model.Patient;
@@ -35,6 +37,7 @@ public class PatientServiceImpl implements IPatientService {
     }
     
     @Override
+    @Transactional
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
         List<HealthInsurance> healthInsurances = healthInsuranceService.getHealthInsuranceEntitiesByIds(patientRequestDTO.getInsuranceIds());
         if (healthInsurances.isEmpty()) {
@@ -51,6 +54,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PatientResponseDTO getPatientById(Long id) {
         Patient patient = findPatientById(id);
         log.info("Patient found with ID: {}", patient.getId());
@@ -58,6 +62,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Patient getPatientEntityById(Long id) {
         Patient patient = findPatientById(id);
         log.info("Patient found with ID: {}", patient.getId());
@@ -65,6 +70,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PatientResponseDTO> getAllPatients() {
         List<Patient> patients = patientRepository.findAll();
         log.info("Found {} patients", patients.size());
@@ -72,6 +78,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PatientResponseDTO> getAllPatients(Pageable pageable) {
         Page<Patient> patients = patientRepository.findAll(pageable);
         log.info("Found {} patients", patients.getTotalElements());
@@ -79,6 +86,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional
     public PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO) {
         Patient patient = findPatientById(id);
         
@@ -95,6 +103,7 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
+    @Transactional
     public void deletePatient(Long id) {
         Patient patient = findPatientById(id);
         patientRepository.delete(patient);
@@ -103,7 +112,7 @@ public class PatientServiceImpl implements IPatientService {
 
     private Patient findPatientById(Long id) {
         return patientRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Patient not found with ID: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found with ID: " + id));
     }
   
     
