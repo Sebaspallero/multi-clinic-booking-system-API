@@ -29,9 +29,11 @@ public interface AppointmentMapper {
     @Mapping(target = "canceledBy", ignore = true)
     @Mapping(target = "rescheduledFrom", ignore = true)
     @Mapping(target = "confirmed", ignore = true)
+    @Mapping(target = "availableSlot", ignore = true)
     Appointment toEntity(AppointmentRequestDTO dto);
 
     @Mapping(target = "cancellationInfo", ignore = true)
+    @Mapping(target = "appointmentDateTime", source = "appointment.availableSlot.slotDateTime")
     AppointmentResponseDTO toDto(Appointment appointment);
 
     List <AppointmentResponseDTO> toDtoList(List<Appointment> appointments);
@@ -53,6 +55,7 @@ public interface AppointmentMapper {
     @Mapping(target = "canceledBy", ignore = true)
     @Mapping(target = "rescheduledFrom", ignore = true)
     @Mapping(target = "confirmed", ignore = true)
+    @Mapping(target = "availableSlot", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(AppointmentRequestDTO dto, @MappingTarget Appointment appointment);
 

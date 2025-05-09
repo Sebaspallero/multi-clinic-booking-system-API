@@ -1,5 +1,6 @@
 package com.sebastian.clinicbooking.service.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.sebastian.clinicbooking.mapper.DoctorAvailabilityMapper;
 import com.sebastian.clinicbooking.model.Doctor;
 import com.sebastian.clinicbooking.model.DoctorAvailability;
 import com.sebastian.clinicbooking.repository.DoctorAvailabilityRepository;
+import com.sebastian.clinicbooking.service.IAvailableSlotService;
 import com.sebastian.clinicbooking.service.IDoctorAvailabilityService;
 import com.sebastian.clinicbooking.service.IDoctorService;
 
@@ -26,9 +28,11 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
     private final DoctorAvailabilityRepository doctorAvailabilityRepository;
     private final DoctorAvailabilityMapper doctorAvailabilityMapper;
     private final IDoctorService doctorService;
+    private final IAvailableSlotService availableSlotService;
 
     @Autowired
-    public DoctorAvailabilityImpl(DoctorAvailabilityRepository doctorAvailabilityRepository, DoctorAvailabilityMapper doctorAvailabilityMapper, IDoctorService doctorService) {
+    public DoctorAvailabilityImpl(DoctorAvailabilityRepository doctorAvailabilityRepository, DoctorAvailabilityMapper doctorAvailabilityMapper, IDoctorService doctorService, IAvailableSlotService availableSlotService) {
+        this.availableSlotService = availableSlotService;
         this.doctorAvailabilityRepository = doctorAvailabilityRepository;
         this.doctorAvailabilityMapper = doctorAvailabilityMapper;
         this.doctorService = doctorService;
@@ -43,6 +47,11 @@ public class DoctorAvailabilityImpl implements IDoctorAvailabilityService{
         DoctorAvailability doctorAvailability = doctorAvailabilityMapper.toEntity(requestDTO);
         doctorAvailability.setDoctor(doctor);
         doctorAvailabilityRepository.save(doctorAvailability);
+
+        LocalDate from = LocalDate.now();
+        LocalDate to = from.plusDays(30);
+        availableSlotService.generateSlotsFromAvailability(doctorAvailability, from, to);
+
         log.info("Doctor Availability created with ID: {}", doctorAvailability.getId());
         return doctorAvailabilityMapper.toDto(doctorAvailability);
         

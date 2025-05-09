@@ -14,6 +14,7 @@ import com.sebastian.clinicbooking.enums.AppointmentStatus;
 import com.sebastian.clinicbooking.exception.ResourceNotFoundException;
 import com.sebastian.clinicbooking.mapper.AppointmentMapper;
 import com.sebastian.clinicbooking.model.Appointment;
+import com.sebastian.clinicbooking.model.AvailableSlot;
 import com.sebastian.clinicbooking.model.Clinic;
 import com.sebastian.clinicbooking.model.Doctor;
 import com.sebastian.clinicbooking.model.Patient;
@@ -22,6 +23,7 @@ import com.sebastian.clinicbooking.repository.ClinicRepository;
 import com.sebastian.clinicbooking.repository.DoctorRepository;
 import com.sebastian.clinicbooking.repository.PatientRepository;
 import com.sebastian.clinicbooking.service.IAppointmentService;
+import com.sebastian.clinicbooking.service.IAvailableSlotService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,11 +36,12 @@ public class AppointmentServiceImpl implements IAppointmentService{
     private final ClinicRepository clinicRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
-
+    private final IAvailableSlotService availableSlotService;
     @Autowired
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository, AppointmentMapper appointmentMapper, 
                                   ClinicRepository clinicRepository, DoctorRepository doctorRepository, 
-                                  PatientRepository patientRepository) {
+                                  PatientRepository patientRepository, IAvailableSlotService availableSlotService) {
+        this.availableSlotService = availableSlotService;
         this.clinicRepository = clinicRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
@@ -53,15 +56,22 @@ public class AppointmentServiceImpl implements IAppointmentService{
         Clinic clinic = getClinicById(appointmentRequestDTO.getClinicId());
         Doctor doctor = getDoctorById(appointmentRequestDTO.getDoctorId());
         Patient patient = getPatientById(appointmentRequestDTO.getPatientId());
+        AvailableSlot availableSlot = availableSlotService.findAvailableSlotEntityById(appointmentRequestDTO.getAvailableSlotId());
         
+        if (!availableSlot.isAvailable()) {
+            throw new IllegalStateException("Selected slot is no longer available.");
+        }
+
         Appointment appointment = appointmentMapper.toEntity(appointmentRequestDTO);
 
         appointment.setStatus(AppointmentStatus.PENDING);
         appointment.setClinic(clinic);
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
+        appointment.setAvailableSlot(availableSlot);
 
         appointmentRepository.save(appointment);
+        availableSlotService.markSlotAsBooked(availableSlot);
 
         log.info("Appointment created with ID: {}, Doctor: {}, Patient: {}", appointment.getId(), doctor.getId(), patient.getId());
         return appointmentMapper.toDto(appointment);
